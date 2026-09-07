@@ -1,13 +1,14 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useData } from '../lib/ctx';
 import { useTheme } from '../lib/store';
-import { MenuIcon, SearchIcon, StarIcon, SunIcon, MoonIcon } from './Icons';
+import { MenuIcon, SearchIcon, StarIcon, SunIcon, MoonIcon, XIcon } from './Icons';
 
 export function Header() {
-  const { meta, error, search, setSearch, favs, favOnly, setFavOnly, navOpen, setNavOpen } = useData();
+  const { meta, search, setSearch, favs, favOnly, setFavOnly, navOpen, setNavOpen } = useData();
   const { effective, cycle } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
+  const toolCount = meta?.$meta.toolCount ?? 462;
 
   return (
     <header className="header">
@@ -18,21 +19,36 @@ export function Header() {
         <span className="brand-name">
           Onyx<b>Forge</b>
         </span>
-        <span className="brand-sub">玄铁炉 · 自托管工具集</span>
+        <span className="brand-sub">
+          自托管工具集 · {toolCount} 个工具 · 全部本地计算 · 默认零外呼
+        </span>
       </Link>
+      <div className="hd-space" />
       <label className="search">
         <SearchIcon />
         <input
           value={search}
-          placeholder="搜索 462 个工具 · 中/英/关键词"
+          placeholder="搜索工具 · 中/英/关键词"
           onChange={(e) => {
             setSearch(e.target.value);
             if (location.pathname !== '/') navigate('/');
           }}
         />
+        {search && (
+          <button
+            type="button"
+            className="clear-btn"
+            aria-label="清空搜索"
+            title="清空"
+            onClick={(e) => {
+              e.preventDefault();
+              setSearch('');
+            }}
+          >
+            <XIcon width={14} height={14} />
+          </button>
+        )}
       </label>
-      {error && <span className="hcount" title={error}>数据加载失败</span>}
-      {!error && meta && <span className="hcount">{meta.$meta.toolCount} 个工具 · 全部本地计算</span>}
       <div className="hright">
         <button
           className={`icon-btn${favOnly ? ' active' : ''}`}

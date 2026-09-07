@@ -29,6 +29,16 @@ const OUT = arg('--out') ?? resolve(root, 'tools/dist');
 const FROM = '/ext-view/srk';
 const TO = '/tools/srk';
 
+// 品牌替换:去掉 SRK fork 页脚/状态栏里的 MDGJX("秒达工具箱")字样,
+// 改为 OnyxForge 并指向本产品仓库。(该字样在 main.js 中仅 1 处,是 <a> 页脚链接。)
+const BRAND_FIXES = [
+  [
+    `https://github.com/work7z/MDGJX'>秒达工具箱 - CyberChef中文版`,
+    `https://github.com/Phoenix0920/OnyxForge'>OnyxForge 玄铁炉`,
+  ],
+];
+const TEXT_FILE = /\.(js|mjs|html|css|json|webmanifest|txt)$/i;
+
 if (!existsSync(SRC)) {
   console.error(`✗ 源目录不存在: ${SRC}`);
   console.error('  请确认 MDGJX-extensions 快照路径,或用 --src 指定 SRK build/prod 的绝对路径。');
@@ -58,6 +68,26 @@ for (const rel of targets) {
     writeFileSync(file, after, 'utf-8');
     const n = before.split(FROM).length - 1;
     console.log(`  ✓ ${rel}:替换 ${n} 处 ${FROM} → ${TO}`);
+  }
+}
+
+// 品牌替换:遍历全部文本文件替换 BRAND_FIXES(主包 main.js 为单行大文件,逐文件读取替换)
+function walkAll(dir, out = []) {
+  for (const name of readdirSync(dir)) {
+    const p = join(dir, name);
+    if (statSync(p).isDirectory()) walkAll(p, out);
+    else if (TEXT_FILE.test(name)) out.push(p);
+  }
+  return out;
+}
+for (const [from, to] of BRAND_FIXES) {
+  for (const f of walkAll(dst)) {
+    const content = readFileSync(f, 'utf-8');
+    const n = content.split(from).length - 1;
+    if (n > 0) {
+      writeFileSync(f, content.split(from).join(to), 'utf-8');
+      console.log(`  ✓ 品牌替换:${f.replace(dst, 'srk')}(${n} 处)`);
+    }
   }
 }
 

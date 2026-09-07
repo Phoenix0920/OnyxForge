@@ -112,3 +112,14 @@ onyxforge/
   4. 「联网工具说明页」清单:C1 SRK — HTTP请求 / DNS over HTTPS(用户输入目标);C2 SRK — 在地图上显示;it-tools — ASCII 文本绘图。CyberChef 其余 29 个「网络」操作均为本地解析/指纹,零联网;OCR 在本构建已本地化。
 - 整改执行(2026-09-07):① `ga.html` 已从 vendored 源码删除;② figlet/Leaflet 决定走「壳内联网提示条 + scan-external 回归」而非本地化(改上游工具源码成本高、收益低,日后要纯离线再在 vendor 内改源码并重打包);③ 壳内 `NET_TOOLS` 已对 4 个联网工具加提示条;④ `scripts/scan-external.mjs` 已落地(默认零外呼,无 api.laftools/extstatic/分析脚本)。
 
+## 6. 进展速记(2026-09-07 · v0.1.0)
+
+**状态**:P0–P4 完成;待 P5 上服务器(x86_64 · 139.155.157.186,对外 `http://IP:39899` · Docker)。
+
+- **壳功能已实现**:分类磁贴首页 / 全量搜索(含清空按钮)/ 收藏 / 最近使用(上限 10,自动淘汰旧)/ 明暗主题;侧栏分组标题显示组内工具总数(381 / 81)。
+- **顶部栏**:品牌 `OnyxForge`(去掉「玄铁炉」)+ 副标题「自托管工具集 · N 个工具 · 全部本地计算 · 默认零外呼」;搜索框右移;收藏与主题切换按钮固定在最右。
+- **工具深链与主题联动**:SRK 用 `/tools/srk/?recipe=<编码>`;it-tools `/tools/it/<id>`;壳暗色时给 iframe URL 追加 `sysdarkmode=true`(SRK 与 it-tools fork 原生读取),实现主题联动。
+- **隐私/品牌**:默认零外呼(scan-external 回归确认);4 个联网工具在壳内有琥珀提示条;SRK fork 内的「秒达工具箱 - CyberChef中文版」页脚链接已替换为 OnyxForge(链接指向 `Phoenix0920/OnyxForge`)。
+- **分发**:`release/onyxforge-0.1.0-server.tgz`(Docker 就绪:nginx.conf + Dockerfile + site/)与 `release/onyxforge-0.1.0-site.tar.gz`;本地端到端用 `deploy/local-serve.mjs`(端口 8900)。
+- **代码库**:github.com/Phoenix0920/OnyxForge(main),版本 0.1.0。
+

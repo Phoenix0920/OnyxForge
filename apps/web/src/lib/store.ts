@@ -75,7 +75,7 @@ export function useRecents() {
   const [recents, setRecents] = usePersistentState<string[]>(LS_RECENT, []);
   const push = useCallback(
     (k: string) =>
-      setRecents((prev) => [k, ...prev.filter((x) => x !== k)].slice(0, 24)),
+      setRecents((prev) => [k, ...prev.filter((x) => x !== k)].slice(0, 10)),
     [setRecents],
   );
   const remove = useCallback(

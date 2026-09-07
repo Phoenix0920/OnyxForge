@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useData } from '../lib/ctx';
+import { useTheme } from '../lib/store';
 import { buildToolUrl, toolKey, SHORT_GROUP, NET_TOOLS } from '../lib/data';
 import { BackIcon, ExternalIcon, StarIcon } from '../components/Icons';
 
 export function ToolPage() {
   const { plugin = '', tool = '' } = useParams();
   const { meta, find, hasFav, toggleFav, pushRecent } = useData();
+  const { effective } = useTheme();
   const [loaded, setLoaded] = useState(false);
 
   const lookup = plugin && tool ? find(plugin, tool) : null;
@@ -37,7 +39,7 @@ export function ToolPage() {
     );
   }
 
-  const src = buildToolUrl(plugin, lookup.item);
+  const src = buildToolUrl(plugin, lookup.item, effective);
   const on = key ? hasFav(key) : false;
   const short = SHORT_GROUP[plugin] ?? plugin;
   const netNote = key ? NET_TOOLS[key] : undefined;

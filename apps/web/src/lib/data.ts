@@ -11,16 +11,26 @@ export const groupKey = (pluginId: string) => pluginId;
 /** 工具唯一 key */
 export const toolKey = (pluginId: string, toolId: string) => `${pluginId}/${toolId}`;
 
-/** 某个工具在静态托管下的 iframe 深链 URL */
-export function buildToolUrl(pluginId: string, tool: ToolItem): string {
+/** 深链 URL 里切换暗色所用的参数(SRK 与 it-tools fork 均约定读取 sysdarkmode=true) */
+const DARK_PARAM = 'sysdarkmode=true';
+
+/**
+ * 某个工具在静态托管下的 iframe 深链 URL。
+ * theme: 'dark' 时附加 sysdarkmode=true,使 iframe 内工具跟随壳的主题。
+ * SRK / CyberChef 深链用 query 的 recipe 参数;it-tools 用路由路径。
+ */
+export function buildToolUrl(pluginId: string, tool: ToolItem, theme: 'light' | 'dark' = 'light'): string {
   const dir = DEPLOY_PATHS[pluginId]?.dir ?? '';
   if (tool.deep.type === 'route') {
     // it-tools: 路由型深链,路径 = base + /<toolId>
-    return `${dir}${tool.toolId}`;
+    return `${dir}${tool.toolId}${theme === 'dark' ? `?${DARK_PARAM}` : ''}`;
   }
-  // SRK / CyberChef: recipe 型深链,取 hash 形式 #recipe=<编码后的操作>()
+  // SRK / CyberChef: recipe 型深链(query 形式,recipe 经 URL 编码)
   const recipe = tool.deep.recipe ?? `${tool.name}()`;
-  return `${dir}#recipe=${encodeURIComponent(recipe)}`;
+  const params = new URLSearchParams();
+  params.set('recipe', recipe);
+  if (theme === 'dark') params.set('sysdarkmode', 'true');
+  return `${dir}?${params.toString()}`;
 }
 
 export const SHORT_GROUP: Record<string, string> = {

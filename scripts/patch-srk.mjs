@@ -20,7 +20,11 @@ const arg = (name) => {
   const i = process.argv.indexOf(name);
   return i !== -1 ? process.argv[i + 1] : undefined;
 };
-const SRC = arg('--src') ?? resolve(root, '../MDGJX-extensions/extensions/SRK-Toolbox/build/prod');
+// 源优先取仓库内自建产物(vendor/srk 已含源码,可在别处 npm install + grunt prod 产出),
+// 否则回退到相邻的 MDGJX-extensions 快照(本机开发时常用)。
+const INTERNAL = resolve(root, 'tools/vendor/srk/build/prod');
+const EXTERNAL = resolve(root, '../MDGJX-extensions/extensions/SRK-Toolbox/build/prod');
+const SRC = arg('--src') ?? (existsSync(INTERNAL) ? INTERNAL : EXTERNAL);
 const OUT = arg('--out') ?? resolve(root, 'tools/dist');
 const FROM = '/ext-view/srk';
 const TO = '/tools/srk';
@@ -28,8 +32,11 @@ const TO = '/tools/srk';
 if (!existsSync(SRC)) {
   console.error(`✗ 源目录不存在: ${SRC}`);
   console.error('  请确认 MDGJX-extensions 快照路径,或用 --src 指定 SRK build/prod 的绝对路径。');
+  console.error('  仓库内自建:cd tools/vendor/srk && npm install && npx grunt prod(需要 Node 18),再重跑本脚本。');
   process.exit(1);
 }
+if (SRC === INTERNAL) console.log('· 使用仓库内自建 SRK 产物(vendor/srk/build/prod)');
+else console.log(`· 使用外部快照 SRK 产物:\n  ${SRC}`);
 
 const dst = resolve(OUT, 'srk');
 rmSync(dst, { recursive: true, force: true });

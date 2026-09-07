@@ -1,0 +1,26 @@
+{
+  "name": "OnyxForge",
+  "version": "0.1.0",
+  "displayName": "OnyxForge · 玄铁炉",
+  "zhName": "玄铁炉",
+  "tagline": "玄铁炉 · 自托管工具集",
+  "description": "隐私优先、可自托管的开发/安全工具集,整合 CyberChef 系 381 个操作与 it-tools 系 81 个子工具,全部在浏览器本地计算。",
+  "packageScope": "@onyxforge",
+  "defaultDomain": "onyxforge.example.com",
+  "repo": "https://github.com/<your-user>/onyxforge",
+  "license": "AGPL-3.0-only",
+  "upstreamNotices": [
+    {
+      "name": "CyberChef (via SRK-Toolbox fork)",
+      "origin": "https://github.com/gchq/CyberChef",
+      "license": "Apache-2.0",
+      "vendored": "tools/vendor/srk"
+    },
+    {
+      "name": "it-tools (zh_Hans fork used by MDGJX)",
+      "origin": "https://github.com/CorentinTh/it-tools",
+      "license": "MIT (fork retained)",
+      "vendored": "tools/vendor/it-tools"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+# deps / build
+node_modules/
+dist/
+apps/*/dist/
+tools/dist/
+
+# vendored tool sources: ignore heavyweight, keep source & LICENSE
+tools/vendor/*/node_modules/
+tools/vendor/*/build/prod/
+tools/vendor/*/md-dist/
+
+# runtime / env
+.env
+.env.local
+.server-home/
+*.log
+.DS_Store

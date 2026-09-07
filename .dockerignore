@@ -1,0 +1,10 @@
+.git
+**/node_modules
+apps/web/node_modules
+apps/web/dist
+tools/vendor
+tools/dist/srk
+tools/dist/it-tools
+.DS_Store
+*.log
+.server-home

@@ -1,0 +1,20 @@
+{
+  "name": "onyxforge",
+  "private": true,
+  "version": "0.1.0",
+  "description": "OnyxForge 玄铁炉 —— 隐私优先、可自托管的开发/安全网页工具集(全量 462 工具,同源纯静态)。",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "scripts": {
+    "web:dev": "npm --prefix apps/web run dev",
+    "web:build": "npm --prefix apps/web run build",
+    "web:typecheck": "npm --prefix apps/web run typecheck",
+    "tools:it:build": "NODE_OPTIONS=--max-old-space-size=6144 npm --prefix tools/vendor/it-tools run build",
+    "nav": "node scripts/gen-nav.mjs ../MDGJX-extensions/meta/miaoda-dist-all.json",
+    "dist:srk": "node scripts/patch-srk.mjs",
+    "dist:assemble": "node scripts/assemble-site.mjs",
+    "dist:scan": "node scripts/scan-external.mjs",
+    "serve": "node deploy/local-serve.mjs",
+    "docker": "bash scripts/docker-build.sh"
+  }
+}

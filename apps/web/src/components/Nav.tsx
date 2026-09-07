@@ -25,11 +25,13 @@ export function Nav() {
           <span className="dot" /> 浏览全部
           <span className="cnt">{meta?.$meta.toolCount}</span>
         </button>
-        {meta?.groups.map((g, gi) => (
+        {meta?.groups.map((g, gi) => {
+          const groupTotal = g.categories.reduce((n, c) => n + c.tools.length, 0);
+          return (
           <div key={g.pluginId}>
             <div className="nav-group-label">
               {g.pluginName}
-              <span className="cnt">{g.categories.length}</span>
+              <span className="cnt">{groupTotal} 工具</span>
             </div>
             {g.categories.map((c, ci) => {
               const key = `${gi}:${ci}`;
@@ -45,7 +47,8 @@ export function Nav() {
               );
             })}
           </div>
-        ))}
+          );
+        })}
       </aside>
     </>
   );
